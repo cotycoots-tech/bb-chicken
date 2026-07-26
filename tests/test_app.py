@@ -74,6 +74,8 @@ def test_final_slide_is_bucket_chicken_image() -> None:
     assert b"<img" in response.data
     assert b"Big Bucket Chicken" in response.data
     assert b"Start over" in response.data
+    assert b"button--hat" in response.data
+    assert b"hat-svg" in response.data
     assert b"Step 10 of 10" in response.data
     assert b'<h1 class="value">https://' not in response.data
 
@@ -82,4 +84,5 @@ def test_final_slide_is_bucket_chicken_image() -> None:
     assert response.status_code == 200
     assert b"<img" in response.data
     assert b"Start over" in response.data
+    assert b"button--hat" in response.data
     assert b"Complete" not in response.data
