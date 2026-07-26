@@ -1,6 +1,7 @@
 # bbc-laugh
 
-**Live on GitHub Pages** · domain **[bbc-laugh.com](https://bbc-laugh.com)**
+**Live site (GitHub Pages):**  
+https://cotycoots-tech.github.io/bb-chicken/
 
 Repo: [cotycoots-tech/bb-chicken](https://github.com/cotycoots-tech/bb-chicken)
 
@@ -24,34 +25,41 @@ https://github.com/user-attachments/assets/83801bd3-82e3-48ab-8a42-a94e4475199b
 
 <img width="768" height="1152" alt="big bucket chicken" src="https://github.com/user-attachments/assets/ded7ac9b-5b20-4258-9060-95d0e8b4837e" />
 
-## Web app (GitHub only)
+## Web app (GitHub Pages only)
 
-Static mobile gallery app. Hosted on **GitHub Pages** from the `docs/` folder — no Render, Docker, or external host.
+Static mobile gallery in `docs/`. No Render or other hosts.
 
 | Item | Value |
 |------|--------|
 | Site name | `bbc-laugh` |
-| Custom domain | `bbc-laugh.com` (`docs/CNAME`) |
-| GitHub Pages path | `/docs` on `main` |
-| Default Pages URL | https://cotycoots-tech.github.io/bb-chicken/ |
+| Live URL | https://cotycoots-tech.github.io/bb-chicken/ |
+| Pages source | `main` branch → **`/docs`** |
 
 ### Enable GitHub Pages
 
 1. Repo → **Settings → Pages**
 2. **Source:** Deploy from a branch
 3. **Branch:** `main` / folder **`/docs`**
-4. Save
+4. **Custom domain:** leave **empty** for now (use the `github.io` URL)
+5. Save
 
-After Pages is on, the site is at:
+You should see the site at https://cotycoots-tech.github.io/bb-chicken/ without a DNS error.
 
-- https://cotycoots-tech.github.io/bb-chicken/
-- https://bbc-laugh.com (after DNS — see below)
+### Why “DNS check failed” happened
 
-### Custom domain (`bbc-laugh.com`)
+Public DNS reports **`bbc-laugh.com` → NXDOMAIN** (domain not found). That means either:
 
-`docs/CNAME` already contains `bbc-laugh.com`.
+1. The domain is **not registered** yet, or  
+2. It’s registered but **no nameservers / zone** are set up.
 
-At your domain registrar, point DNS at GitHub Pages:
+GitHub can only pass the DNS check **after** the domain exists and points at GitHub Pages. Adding a custom domain before that always fails.
+
+### Custom domain later (`bbc-laugh.com`)
+
+**Do this only after you own the domain and DNS works.**
+
+1. **Register** `bbc-laugh.com` (Namecheap, Google Domains/Squarespace, Cloudflare, GoDaddy, etc.).
+2. At the registrar (or Cloudflare DNS), create:
 
 | Type | Name | Value |
 |------|------|--------|
@@ -61,34 +69,42 @@ At your domain registrar, point DNS at GitHub Pages:
 | `A` | `@` | `185.199.111.153` |
 | `CNAME` | `www` | `cotycoots-tech.github.io` |
 
-Then in **Settings → Pages**, confirm custom domain `bbc-laugh.com` and enable **Enforce HTTPS**.
+3. Wait until this succeeds (not NXDOMAIN):
+
+   ```bash
+   dig +short A bbc-laugh.com
+   # should list the four 185.199.x.x addresses
+   ```
+
+4. In the repo, add `docs/CNAME` with a single line:
+
+   ```text
+   bbc-laugh.com
+   ```
+
+5. Commit/push, then in **Settings → Pages** set custom domain to `bbc-laugh.com`, wait for DNS check, enable **Enforce HTTPS**.
+
+Until step 3 works, keep the custom domain field empty.
 
 ### Local preview
 
-Open the static site:
-
 ```bash
-# simple static server
 python3 -m http.server 5050 --directory docs
 ```
 
 Visit `http://127.0.0.1:5050`.
 
-Optional Flask mirror (same gallery, for local Python work):
+Optional Flask mirror:
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
 python3 -m pip install -e '.[test]'
 bbc-laugh
-# http://127.0.0.1:5050
 python3 -m pytest
 ```
 
 ### Project structure
 
-- `docs/` — **published web app** (GitHub Pages)
-- `docs/CNAME` — custom domain `bbc-laugh.com`
+- `docs/` — published web app (GitHub Pages)
 - `src/bb_chicken/` — optional local Flask mirror
-- `tests/` — unit tests for the Flask mirror
+- `tests/` — unit tests
 - `pyproject.toml` — local package metadata
