@@ -15,14 +15,14 @@ def test_index_route_shows_metadata() -> None:
 
     response = client.get("/?index=1")
     assert response.status_code == 200
-    assert SITE_DOMAIN.encode() in response.data or b"Domain" in response.data
+    assert b"Story" in response.data or b"big belly chicken" in response.data
 
 
 def test_index_route_shows_image_and_video() -> None:
     client = app.test_client()
 
-    # First gallery image (after Title, Domain, Version, Author, Story).
-    response = client.get("/?index=5")
+    # First gallery image (after Title, Story).
+    response = client.get("/?index=2")
     assert response.status_code == 200
     assert b"<img" in response.data
     assert b"github.com/user-attachments/assets" in response.data
@@ -31,7 +31,7 @@ def test_index_route_shows_image_and_video() -> None:
     assert b'<h1 class="value">https://' not in response.data
 
     # First gallery video.
-    response = client.get("/?index=6")
+    response = client.get("/?index=3")
     assert response.status_code == 200
     assert b"<video" in response.data
     assert b"github.com/user-attachments/assets" in response.data
@@ -54,16 +54,16 @@ def test_branding_meta() -> None:
     assert b'property="og:url"' in response.data
 
 
-def test_step_14_is_final_image_slide() -> None:
+def test_final_slide_is_bucket_chicken_image() -> None:
     client = app.test_client()
 
-    # Step 14 is index 13: Big Bucket Chicken image, final slide.
-    response = client.get("/?index=13")
+    # After removing Domain/Version/Author: 11 steps; final is index 10.
+    response = client.get("/?index=10")
     assert response.status_code == 200
     assert b"<img" in response.data
     assert b"Big Bucket Chicken" in response.data
     assert b"Start over" in response.data
-    assert b"Step 14 of 14" in response.data
+    assert b"Step 11 of 11" in response.data
     assert b'<h1 class="value">https://' not in response.data
 
     # Past the end clamps onto the same final image slide.

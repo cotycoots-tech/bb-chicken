@@ -26,9 +26,6 @@ BOOT_ID = f"{os.getpid()}-{time.time()}"
 # Gallery assets from the project README (GitHub user-attachments).
 metadata_items = [
     {"label": "Title", "value": SITE_NAME},
-    {"label": "Domain", "value": SITE_DOMAIN},
-    {"label": "Version", "value": "0.1.0"},
-    {"label": "Author", "value": "cotycoots-tech"},
     {
         "label": "Story",
         "value": "big belly chicken vs big black cat",
