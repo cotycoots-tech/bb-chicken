@@ -12,7 +12,7 @@ app = Flask(__name__, static_folder="static", static_url_path="/static")
 SITE_NAME = os.environ.get("BBC_LAUGH_SITE_NAME", "bbc-laugh")
 # Default to GitHub Pages URL until a real custom domain has working DNS.
 SITE_DOMAIN = os.environ.get(
-    "BBC_LAUGH_DOMAIN", "cotycoots-tech.github.io/bb-chicken"
+    "BBC_LAUGH_DOMAIN", "cotycoots-tech.github.io/bbc-laugh"
 )
 # Dev-only live-reload polling (disabled in production).
 DEV_MODE = os.environ.get("FLASK_DEBUG", "").lower() in {"1", "true", "yes"} or (

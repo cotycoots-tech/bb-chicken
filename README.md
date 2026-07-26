@@ -1,9 +1,9 @@
 # bbc-laugh
 
 **Live site (GitHub Pages):**  
-https://cotycoots-tech.github.io/bb-chicken/
+https://cotycoots-tech.github.io/bbc-laugh/
 
-Repo: [cotycoots-tech/bb-chicken](https://github.com/cotycoots-tech/bb-chicken)
+Repo: [cotycoots-tech/bbc-laugh](https://github.com/cotycoots-tech/bbc-laugh)
 
 big belly chicken vs big black cat
 
@@ -32,7 +32,7 @@ Static mobile gallery in `docs/`. No Render or other hosts.
 | Item | Value |
 |------|--------|
 | Site name | `bbc-laugh` |
-| Live URL | https://cotycoots-tech.github.io/bb-chicken/ |
+| Live URL | https://cotycoots-tech.github.io/bbc-laugh/ |
 | Pages source | `main` branch → **`/docs`** |
 
 ### Enable GitHub Pages
@@ -43,7 +43,7 @@ Static mobile gallery in `docs/`. No Render or other hosts.
 4. **Custom domain:** leave **empty** for now (use the `github.io` URL)
 5. Save
 
-You should see the site at https://cotycoots-tech.github.io/bb-chicken/ without a DNS error.
+You should see the site at https://cotycoots-tech.github.io/bbc-laugh/ without a DNS error.
 
 ### Why “DNS check failed” happened
 
