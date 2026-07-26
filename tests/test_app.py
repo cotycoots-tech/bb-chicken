@@ -34,12 +34,14 @@ def test_index_route_shows_image_and_video() -> None:
     # URL must not appear as visible page text (only as media src).
     assert b'<h1 class="value">https://' not in response.data
 
-    # First gallery video.
+    # First gallery video — audio preset on (not muted by default).
     response = client.get("/?index=3")
     assert response.status_code == 200
     assert b"<video" in response.data
     assert b"github.com/user-attachments/assets" in response.data
     assert b"video" in response.data.lower()
+    assert b" muted" not in response.data
+    assert b"volume = 1" in response.data
     assert b'<h1 class="value">https://' not in response.data
 
 

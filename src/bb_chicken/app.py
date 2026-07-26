@@ -247,11 +247,36 @@ PAGE_TEMPLATE = """<!doctype html>
       </div>
     {% elif media_type == 'video' %}
       <div class="media-frame">
-        <video class="media" controls autoplay muted loop playsinline>
+        <video class="media" id="step-video" controls autoplay loop playsinline>
           <source src="{{ media_url }}" type="video/mp4" />
           Your browser does not support embedded video.
         </video>
       </div>
+      <script>
+        (function () {
+          const video = document.getElementById("step-video");
+          if (!video) return;
+          // Preset audio on for media with sound.
+          video.muted = false;
+          video.defaultMuted = false;
+          video.volume = 1;
+          const playWithSound = () => {
+            video.muted = false;
+            video.volume = 1;
+            return video.play();
+          };
+          playWithSound().catch(function () {
+            const unlock = function () {
+              playWithSound().finally(function () {
+                document.removeEventListener("pointerdown", unlock, true);
+                document.removeEventListener("keydown", unlock, true);
+              });
+            };
+            document.addEventListener("pointerdown", unlock, true);
+            document.addEventListener("keydown", unlock, true);
+          });
+        })();
+      </script>
     {% endif %}
     {% if not media_type %}
     <p class="message">{{ message }}</p>

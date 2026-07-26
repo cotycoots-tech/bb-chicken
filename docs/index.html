@@ -282,14 +282,34 @@
           video.className = "media";
           video.controls = true;
           video.autoplay = true;
-          video.muted = true;
           video.loop = true;
           video.playsInline = true;
+          // Preset audio on for media with sound.
+          video.muted = false;
+          video.defaultMuted = false;
+          video.volume = 1;
           const source = document.createElement("source");
           source.src = mediaSrc;
           source.type = "video/mp4";
           video.appendChild(source);
           mediaFrame.appendChild(video);
+          // Prefer unmuted autoplay (works after a user tap such as Next).
+          const playWithSound = () => {
+            video.muted = false;
+            video.volume = 1;
+            return video.play();
+          };
+          playWithSound().catch(() => {
+            // If the browser blocks sound until a gesture, unlock on next interaction.
+            const unlock = () => {
+              playWithSound().finally(() => {
+                document.removeEventListener("pointerdown", unlock, true);
+                document.removeEventListener("keydown", unlock, true);
+              });
+            };
+            document.addEventListener("pointerdown", unlock, true);
+            document.addEventListener("keydown", unlock, true);
+          });
         }
       } else {
         valueEl.hidden = false;
