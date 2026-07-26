@@ -196,6 +196,7 @@ PAGE_TEMPLATE = """<!doctype html>
       display: grid;
       gap: 0.5rem;
       flex: 0 0 auto;
+      justify-items: center;
     }
     .button {
       display: inline-flex;
@@ -219,6 +220,42 @@ PAGE_TEMPLATE = """<!doctype html>
       box-shadow: 0 18px 30px rgba(47, 124, 71, 0.24);
       outline: none;
     }
+    .button.button--hat {
+      position: relative;
+      width: min(100%, 280px);
+      height: 118px;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      color: #1a1a1a;
+      overflow: visible;
+    }
+    .button.button--hat:hover,
+    .button.button--hat:focus-visible {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: none;
+      filter: drop-shadow(0 14px 18px rgba(30, 70, 40, 0.28));
+    }
+    .button.button--hat .hat-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .button.button--hat .hat-label {
+      position: relative;
+      z-index: 1;
+      margin-top: -18px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+      pointer-events: none;
+    }
     .footer {
       margin: 0;
       color: #827970;
@@ -228,7 +265,9 @@ PAGE_TEMPLATE = """<!doctype html>
     }
     @media (max-height: 700px) {
       .card { padding: 0.65rem 0.75rem; gap: 0.5rem; border-radius: 16px; }
-      .button { padding: 0.7rem 1rem; }
+      .button:not(.button--hat) { padding: 0.7rem 1rem; }
+      .button.button--hat { height: 100px; width: min(100%, 240px); }
+      .button.button--hat .hat-label { font-size: 0.8rem; margin-top: -14px; }
       .label { font-size: 0.72rem; }
     }
   </style>
@@ -282,7 +321,33 @@ PAGE_TEMPLATE = """<!doctype html>
     <p class="message">{{ message }}</p>
     {% endif %}
     <div class="actions">
+      {% if is_final %}
+      <a class="button button--hat" href="{{ next_url }}" aria-label="Start over">
+        <svg class="hat-svg" viewBox="0 0 280 118" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="hatCrown" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3fa85a"/>
+              <stop offset="100%" stop-color="#246b38"/>
+            </linearGradient>
+            <linearGradient id="hatBrim" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2f8a47"/>
+              <stop offset="100%" stop-color="#1c522b"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="140" cy="92" rx="118" ry="18" fill="url(#hatBrim)"/>
+          <ellipse cx="140" cy="88" rx="110" ry="12" fill="#1a4a28" opacity="0.35"/>
+          <path d="M48 88 C52 42 90 18 140 18 C190 18 228 42 232 88 Z" fill="url(#hatCrown)"/>
+          <path d="M62 86 C70 52 100 34 140 34 C180 34 210 52 218 86" fill="none" stroke="#8fd49e" stroke-width="2" opacity="0.45"/>
+          <path d="M140 22 V78" stroke="#1a4a28" stroke-width="2" opacity="0.25"/>
+          <circle cx="140" cy="20" r="7" fill="#f2e6c8"/>
+          <circle cx="140" cy="20" r="3.5" fill="#d4c08a"/>
+          <ellipse cx="140" cy="94" rx="90" ry="6" fill="#6fbf82" opacity="0.25"/>
+        </svg>
+        <span class="hat-label">Start over</span>
+      </a>
+      {% else %}
       <a class="button" href="{{ next_url }}">{{ button_text }}</a>
+      {% endif %}
     </div>
     <p class="footer">Step {{ step }} of {{ total }} · {{ site_name }}</p>
   </main>
@@ -402,6 +467,7 @@ def index() -> str:
         media_type=media_type,
         media_url=media_url,
         show_caption=show_caption,
+        is_final=is_final,
         site_name=SITE_NAME,
         site_domain=SITE_DOMAIN,
         dev_mode=DEV_MODE,
