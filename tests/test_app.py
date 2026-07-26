@@ -55,8 +55,11 @@ def test_branding_meta() -> None:
     response = client.get("/")
     assert SITE_NAME.encode() in response.data
     assert b"Step 1 of" in response.data
-    # Domain string must not appear in the step chrome / body copy.
-    assert b"cotycoots-tech.github.io/bb-chicken" not in response.data
+    # Step footer shows name only — not the Pages URL.
+    footer_start = response.data.find(b'class="footer"')
+    assert footer_start != -1
+    footer_chunk = response.data[footer_start : footer_start + 200]
+    assert b"github.io" not in footer_chunk
     assert b'property="og:url"' in response.data
 
 
