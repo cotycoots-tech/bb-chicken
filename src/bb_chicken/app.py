@@ -259,7 +259,7 @@ PAGE_TEMPLATE = """<!doctype html>
     <div class="actions">
       <a class="button" href="{{ next_url }}">{{ button_text }}</a>
     </div>
-    <p class="footer">Step {{ step }} of {{ total }} · {{ site_name }} · {{ site_domain }}</p>
+    <p class="footer">Step {{ step }} of {{ total }} · {{ site_name }}</p>
   </main>
   {% if dev_mode %}
   <script>

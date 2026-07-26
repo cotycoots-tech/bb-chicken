@@ -54,7 +54,9 @@ def test_branding_meta() -> None:
     client = app.test_client()
     response = client.get("/")
     assert SITE_NAME.encode() in response.data
-    assert SITE_DOMAIN.encode() in response.data
+    assert b"Step 1 of" in response.data
+    # Domain string must not appear in the step chrome / body copy.
+    assert b"cotycoots-tech.github.io/bb-chicken" not in response.data
     assert b'property="og:url"' in response.data
 
 

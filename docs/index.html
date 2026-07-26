@@ -158,8 +158,6 @@
   </main>
   <script>
     const SITE_NAME = "bbc-laugh";
-    // Use github.io until bbc-laugh.com is registered and DNS points at Pages.
-    const SITE_DOMAIN = "cotycoots-tech.github.io/bb-chicken";
 
     const items = [
       { label: "Title", value: SITE_NAME },
@@ -254,7 +252,7 @@
 
       labelEl.textContent = item.label;
       footerEl.textContent =
-        "Step " + (safeIndex + 1) + " of " + total + " · " + SITE_NAME + " · " + SITE_DOMAIN;
+        "Step " + (safeIndex + 1) + " of " + total + " · " + SITE_NAME;
 
       if (isLast) {
         nextBtn.textContent = "Start over";
