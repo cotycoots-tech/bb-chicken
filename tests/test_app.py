@@ -13,15 +13,19 @@ def test_index_route_shows_metadata() -> None:
     assert SITE_NAME.encode() in response.data
     assert b"Next" in response.data
 
+    # Story is combined with Boxing Chicken image.
     response = client.get("/?index=1")
     assert response.status_code == 200
-    assert b"Story" in response.data or b"big belly chicken" in response.data
+    assert b"Story" in response.data
+    assert b"big belly chicken vs big black cat" in response.data
+    assert b"<img" in response.data
+    assert b"73c75b27-cd64-461b-9ee7-1cf879c0ef82" in response.data
 
 
 def test_index_route_shows_image_and_video() -> None:
     client = app.test_client()
 
-    # First gallery image (after Title, Story).
+    # First pure gallery image (after Title, Story+image).
     response = client.get("/?index=2")
     assert response.status_code == 200
     assert b"<img" in response.data
@@ -57,13 +61,13 @@ def test_branding_meta() -> None:
 def test_final_slide_is_bucket_chicken_image() -> None:
     client = app.test_client()
 
-    # After removing Domain/Version/Author: 11 steps; final is index 10.
-    response = client.get("/?index=10")
+    # 10 steps after combining Boxing image into Story; final is index 9.
+    response = client.get("/?index=9")
     assert response.status_code == 200
     assert b"<img" in response.data
     assert b"Big Bucket Chicken" in response.data
     assert b"Start over" in response.data
-    assert b"Step 11 of 11" in response.data
+    assert b"Step 10 of 10" in response.data
     assert b'<h1 class="value">https://' not in response.data
 
     # Past the end clamps onto the same final image slide.

@@ -26,9 +26,13 @@ BOOT_ID = f"{os.getpid()}-{time.time()}"
 # Gallery assets from the project README (GitHub user-attachments).
 metadata_items = [
     {"label": "Title", "value": SITE_NAME},
+    # Story + former Boxing Chicken image (combined)
     {
         "label": "Story",
         "value": "big belly chicken vs big black cat",
+        "media_type": "image",
+        "media_url": "https://github.com/user-attachments/assets/73c75b27-cd64-461b-9ee7-1cf879c0ef82",
+        "show_caption": True,
     },
     {
         "label": "Belly Busting Chicken",
@@ -51,11 +55,6 @@ metadata_items = [
         "media_type": "video",
     },
     {
-        "label": "Boxing Chicken vs Black Cat",
-        "value": "https://github.com/user-attachments/assets/73c75b27-cd64-461b-9ee7-1cf879c0ef82",
-        "media_type": "image",
-    },
-    {
         "label": "Boxing Chicken vs Black Cat (video)",
         "value": "https://github.com/user-attachments/assets/1b37c9b1-8d7b-46af-864c-520e5cd26a34",
         "media_type": "video",
@@ -70,7 +69,7 @@ metadata_items = [
         "value": "https://github.com/user-attachments/assets/83801bd3-82e3-48ab-8a42-a94e4475199b",
         "media_type": "video",
     },
-    # Step 14 — final slide (image)
+    # Final slide (image)
     {
         "label": "Big Bucket Chicken",
         "value": "https://github.com/user-attachments/assets/ded7ac9b-5b20-4258-9060-95d0e8b4837e",
@@ -156,6 +155,10 @@ PAGE_TEMPLATE = """<!doctype html>
       color: #1d1b19;
       word-break: break-word;
     }
+    .card--media .value {
+      font-size: clamp(1.1rem, 3.5vw, 1.55rem);
+      line-height: 1.2;
+    }
     .message {
       margin: 0;
       color: #5b5248;
@@ -234,7 +237,7 @@ PAGE_TEMPLATE = """<!doctype html>
   <main class="card{% if media_type %} card--media{% endif %}" role="main">
     <div class="card-header">
       <div class="label">{{ label }}</div>
-      {% if not media_type %}
+      {% if show_caption or not media_type %}
       <h1 class="value">{{ value }}</h1>
       {% endif %}
     </div>
@@ -343,13 +346,15 @@ def index() -> str:
         current_index = 0
 
     total = len(metadata_items)
-    # Clamp past-the-end navigations onto the final image slide (step 14).
+    # Clamp past-the-end navigations onto the final image slide.
     current_index = min(max(0, current_index), total - 1)
     item = metadata_items[current_index]
     label = item["label"]
     value = item["value"]
     step = current_index + 1
-    media_type, media_url = get_media_info(value, item.get("media_type"))
+    media_src = item.get("media_url") or value
+    media_type, media_url = get_media_info(media_src, item.get("media_type"))
+    show_caption = bool(item.get("show_caption"))
     is_final = current_index == total - 1 or bool(item.get("final"))
     if is_final:
         button_text = "Start over"
@@ -371,6 +376,7 @@ def index() -> str:
         total=total,
         media_type=media_type,
         media_url=media_url,
+        show_caption=show_caption,
         site_name=SITE_NAME,
         site_domain=SITE_DOMAIN,
         dev_mode=DEV_MODE,

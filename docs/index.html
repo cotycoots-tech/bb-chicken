@@ -73,6 +73,10 @@
       color: #1d1b19;
       word-break: break-word;
     }
+    .card--media .value {
+      font-size: clamp(1.1rem, 3.5vw, 1.55rem);
+      line-height: 1.2;
+    }
     .message {
       margin: 0;
       color: #5b5248;
@@ -159,7 +163,14 @@
 
     const items = [
       { label: "Title", value: SITE_NAME },
-      { label: "Story", value: "big belly chicken vs big black cat" },
+      // Story + former Boxing Chicken image (combined)
+      {
+        label: "Story",
+        value: "big belly chicken vs big black cat",
+        mediaType: "image",
+        mediaUrl: "https://github.com/user-attachments/assets/73c75b27-cd64-461b-9ee7-1cf879c0ef82",
+        showCaption: true,
+      },
       {
         label: "Belly Busting Chicken",
         value: "https://github.com/user-attachments/assets/9965d439-0e58-489c-b3b5-9d41f924c0e5",
@@ -181,11 +192,6 @@
         mediaType: "video",
       },
       {
-        label: "Boxing Chicken vs Black Cat",
-        value: "https://github.com/user-attachments/assets/73c75b27-cd64-461b-9ee7-1cf879c0ef82",
-        mediaType: "image",
-      },
-      {
         label: "Boxing Chicken vs Black Cat (video)",
         value: "https://github.com/user-attachments/assets/1b37c9b1-8d7b-46af-864c-520e5cd26a34",
         mediaType: "video",
@@ -200,7 +206,7 @@
         value: "https://github.com/user-attachments/assets/83801bd3-82e3-48ab-8a42-a94e4475199b",
         mediaType: "video",
       },
-      // Step 14 — final slide (image)
+      // Final slide (image)
       {
         label: "Big Bucket Chicken",
         value: "https://github.com/user-attachments/assets/ded7ac9b-5b20-4258-9060-95d0e8b4837e",
@@ -232,11 +238,13 @@
 
     function render(index) {
       const total = items.length;
-      // Clamp past-the-end navigations onto the final image slide (step 14).
+      // Clamp past-the-end navigations onto the final image slide.
       const safeIndex = Math.min(Math.max(0, index), total - 1);
       const item = items[safeIndex];
       const isLast = safeIndex === total - 1 || item.final === true;
       const isMedia = item.mediaType === "image" || item.mediaType === "video";
+      const mediaSrc = item.mediaUrl || item.value;
+      const showCaption = Boolean(item.showCaption);
 
       mediaFrame.innerHTML = "";
       mediaFrame.hidden = true;
@@ -260,10 +268,14 @@
         card.classList.add("card--media");
         messageEl.hidden = true;
         mediaFrame.hidden = false;
+        if (showCaption) {
+          valueEl.hidden = false;
+          valueEl.textContent = item.value;
+        }
         if (item.mediaType === "image") {
           const img = document.createElement("img");
           img.className = "media";
-          img.src = item.value;
+          img.src = mediaSrc;
           img.alt = item.label;
           img.loading = "lazy";
           mediaFrame.appendChild(img);
@@ -276,7 +288,7 @@
           video.loop = true;
           video.playsInline = true;
           const source = document.createElement("source");
-          source.src = item.value;
+          source.src = mediaSrc;
           source.type = "video/mp4";
           video.appendChild(source);
           mediaFrame.appendChild(video);
