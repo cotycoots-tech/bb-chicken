@@ -1,5 +1,5 @@
 [project]
-name = "bb-chicken"
+name = "bbc-laugh"
 version = "0.1.0"
 description = "bbc-laugh — big belly chicken vs big black cat web app (GitHub Pages)."
 readme = "README.md"
@@ -17,8 +17,7 @@ classifiers = [
 ]
 
 [project.scripts]
-bb-chicken = "bb_chicken.app:main"
-bbc-laugh = "bb_chicken.app:main"
+bbc-laugh = "bbc_laugh.app:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

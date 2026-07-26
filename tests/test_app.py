@@ -1,4 +1,4 @@
-from bb_chicken.app import SITE_DOMAIN, SITE_NAME, app, welcome_message
+from bbc_laugh.app import SITE_DOMAIN, SITE_NAME, app, welcome_message
 
 
 def test_welcome_message() -> None:

@@ -16,7 +16,7 @@ SITE_DOMAIN = os.environ.get(
 )
 # Dev-only live-reload polling (disabled in production).
 DEV_MODE = os.environ.get("FLASK_DEBUG", "").lower() in {"1", "true", "yes"} or (
-    os.environ.get("BB_CHICKEN_ENV", os.environ.get("ENV", "development")).lower()
+    os.environ.get("BBC_LAUGH_ENV", os.environ.get("ENV", "development")).lower()
     not in {"production", "prod"}
 )
 
@@ -410,10 +410,10 @@ def index() -> str:
 
 def main() -> None:
     """Run the bbc-laugh web app (dev server with auto-reload)."""
-    host = os.environ.get("BB_CHICKEN_HOST", "127.0.0.1")
+    host = os.environ.get("BBC_LAUGH_HOST", "127.0.0.1")
     # Default 5050 avoids macOS AirPlay Receiver on port 5000.
     # Production hosts set PORT (and usually HOST 0.0.0.0 via gunicorn).
-    port = int(os.environ.get("PORT", os.environ.get("BB_CHICKEN_PORT", "5050")))
+    port = int(os.environ.get("PORT", os.environ.get("BBC_LAUGH_PORT", "5050")))
     debug = DEV_MODE
     print(f"{SITE_NAME} is running at http://{host}:{port} ({SITE_DOMAIN})")
     if debug:

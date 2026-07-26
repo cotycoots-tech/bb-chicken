@@ -105,6 +105,6 @@ python3 -m pytest
 ### Project structure
 
 - `docs/` — published web app (GitHub Pages)
-- `src/bb_chicken/` — optional local Flask mirror
+- `src/bbc_laugh/` — optional local Flask mirror
 - `tests/` — unit tests
-- `pyproject.toml` — local package metadata
+- `pyproject.toml` — local package metadata (`bbc-laugh` / `bbc_laugh`)
