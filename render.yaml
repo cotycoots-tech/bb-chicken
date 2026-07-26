@@ -1,0 +1,17 @@
+# Deploy bbc-laugh on Render: https://render.com
+# After deploy, attach custom domain bbc-laugh.com in the Render dashboard.
+services:
+  - type: web
+    name: bbc-laugh
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: BB_CHICKEN_ENV
+        value: production
+      - key: FLASK_DEBUG
+        value: "0"
+      - key: BBC_LAUGH_SITE_NAME
+        value: bbc-laugh
+      - key: BBC_LAUGH_DOMAIN
+        value: bbc-laugh.com

@@ -1,0 +1,30 @@
+[project]
+name = "bb-chicken"
+version = "0.1.0"
+description = "bbc-laugh — big belly chicken vs big black cat web app."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "Flask>=3.0,<4.0",
+    "gunicorn>=22.0,<24.0",
+]
+optional-dependencies = { test = ["pytest>=7.0"] }
+license = { text = "MIT" }
+authors = [ { name = "cotycoots-tech" } ]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+bb-chicken = "bb_chicken.app:main"
+bbc-laugh = "bb_chicken.app:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = { find = { where = ["src"] } }
+
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
