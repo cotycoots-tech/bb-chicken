@@ -73,10 +73,12 @@ metadata_items = [
         "value": "https://github.com/user-attachments/assets/83801bd3-82e3-48ab-8a42-a94e4475199b",
         "media_type": "video",
     },
+    # Step 14 — final slide (image)
     {
         "label": "Big Bucket Chicken",
         "value": "https://github.com/user-attachments/assets/ded7ac9b-5b20-4258-9060-95d0e8b4837e",
         "media_type": "image",
+        "final": True,
     },
 ]
 
@@ -344,24 +346,22 @@ def index() -> str:
         current_index = 0
 
     total = len(metadata_items)
-    if current_index >= total:
-        label = "Complete"
-        value = f"That’s the end of {SITE_NAME}"
+    # Clamp past-the-end navigations onto the final image slide (step 14).
+    current_index = min(max(0, current_index), total - 1)
+    item = metadata_items[current_index]
+    label = item["label"]
+    value = item["value"]
+    step = current_index + 1
+    media_type, media_url = get_media_info(value, item.get("media_type"))
+    is_final = current_index == total - 1 or bool(item.get("final"))
+    if is_final:
         button_text = "Start over"
         next_url = url_for("index", index=0)
-        message = f"You’re at the end of the gallery on {SITE_DOMAIN}. Tap to begin again."
-        step = total
-        media_type = None
-        media_url = ""
+        message = "That’s the end — tap to begin again."
     else:
-        item = metadata_items[current_index]
-        label = item["label"]
-        value = item["value"]
         button_text = "Next"
         next_url = url_for("index", index=current_index + 1)
         message = "Tap the button to move to the next entry."
-        step = current_index + 1
-        media_type, media_url = get_media_info(value, item.get("media_type"))
 
     return render_template_string(
         PAGE_TEMPLATE,

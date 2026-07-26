@@ -203,10 +203,12 @@
         value: "https://github.com/user-attachments/assets/83801bd3-82e3-48ab-8a42-a94e4475199b",
         mediaType: "video",
       },
+      // Step 14 — final slide (image)
       {
         label: "Big Bucket Chicken",
         value: "https://github.com/user-attachments/assets/ded7ac9b-5b20-4258-9060-95d0e8b4837e",
         mediaType: "image",
+        final: true,
       },
     ];
 
@@ -233,32 +235,29 @@
 
     function render(index) {
       const total = items.length;
+      // Clamp past-the-end navigations onto the final image slide (step 14).
+      const safeIndex = Math.min(Math.max(0, index), total - 1);
+      const item = items[safeIndex];
+      const isLast = safeIndex === total - 1 || item.final === true;
+      const isMedia = item.mediaType === "image" || item.mediaType === "video";
+
       mediaFrame.innerHTML = "";
       mediaFrame.hidden = true;
       valueEl.hidden = true;
       messageEl.hidden = false;
       card.classList.remove("card--media");
 
-      if (index >= total) {
-        labelEl.textContent = "Complete";
-        valueEl.hidden = false;
-        valueEl.textContent = "That’s the end of " + SITE_NAME;
-        messageEl.textContent =
-          "You’re at the end of the gallery on " + SITE_DOMAIN + ". Tap to begin again.";
+      labelEl.textContent = item.label;
+      footerEl.textContent =
+        "Step " + (safeIndex + 1) + " of " + total + " · " + SITE_NAME + " · " + SITE_DOMAIN;
+
+      if (isLast) {
         nextBtn.textContent = "Start over";
         nextBtn.onclick = () => setIndex(0);
-        footerEl.textContent =
-          "Step " + total + " of " + total + " · " + SITE_NAME + " · " + SITE_DOMAIN;
-        return;
+      } else {
+        nextBtn.textContent = "Next";
+        nextBtn.onclick = () => setIndex(safeIndex + 1);
       }
-
-      const item = items[index];
-      const isMedia = item.mediaType === "image" || item.mediaType === "video";
-      labelEl.textContent = item.label;
-      nextBtn.textContent = "Next";
-      nextBtn.onclick = () => setIndex(index + 1);
-      footerEl.textContent =
-        "Step " + (index + 1) + " of " + total + " · " + SITE_NAME + " · " + SITE_DOMAIN;
 
       if (isMedia) {
         card.classList.add("card--media");
@@ -288,7 +287,9 @@
       } else {
         valueEl.hidden = false;
         valueEl.textContent = item.value;
-        messageEl.textContent = "Tap the button to move to the next entry.";
+        messageEl.textContent = isLast
+          ? "That’s the end — tap to begin again."
+          : "Tap the button to move to the next entry.";
       }
     }
 

@@ -52,3 +52,23 @@ def test_branding_meta() -> None:
     assert SITE_NAME.encode() in response.data
     assert SITE_DOMAIN.encode() in response.data
     assert b'property="og:url"' in response.data
+
+
+def test_step_14_is_final_image_slide() -> None:
+    client = app.test_client()
+
+    # Step 14 is index 13: Big Bucket Chicken image, final slide.
+    response = client.get("/?index=13")
+    assert response.status_code == 200
+    assert b"<img" in response.data
+    assert b"Big Bucket Chicken" in response.data
+    assert b"Start over" in response.data
+    assert b"Step 14 of 14" in response.data
+    assert b'<h1 class="value">https://' not in response.data
+
+    # Past the end clamps onto the same final image slide.
+    response = client.get("/?index=99")
+    assert response.status_code == 200
+    assert b"<img" in response.data
+    assert b"Start over" in response.data
+    assert b"Complete" not in response.data
